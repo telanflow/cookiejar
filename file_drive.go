@@ -39,7 +39,7 @@ func (f *FileDrive) saveEntries() {
 
 	var fp *os.File
 	if checkFileIsExist(f.filename) {
-		fp, _ = os.OpenFile(f.filename, os.O_WRONLY, 0)
+		fp, _ = os.OpenFile(f.filename, os.O_WRONLY|os.O_TRUNC, 0600)
 	} else {
 		fp, _ = os.Create(f.filename)
 	}
