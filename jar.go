@@ -160,6 +160,13 @@ func (e *entry) record() []string {
 		httpOnlyPrefix = "#HttpOnly_"
 	}
 
+	// domain 		- The domain that created and that can read the variable.
+	// flag 		- A TRUE/FALSE value indicating if all machines within a given domain can access the variable. This value is set automatically by the browser, depending on the value you set for domain.
+	// path 		- The path within the domain that the variable is valid for.
+	// secure 		- A TRUE/FALSE value indicating if a secure connection with the domain is needed to access the variable.
+	// expiration 	- The UNIX time that the variable will expire on.
+	// name 		- The name of the variable.
+	// value 		- The value of the variable.
 	return []string{
 		httpOnlyPrefix + e.Domain,
 		strBool(tailMatch),
