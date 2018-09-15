@@ -26,20 +26,20 @@ func (r *RedisDrive) Delete(key string) {
 	delete(r.entries, key)
 }
 
-func (r *RedisDrive) saveEntries(k string) (err error) {
+func (r *RedisDrive) saveEntries(k string) error {
 	conn := r.pool.Get()
 	defer conn.Close()
 
 	v, err := json.MarshalToString(r.entries[k])
 	if err != nil {
-		return
+		return err
 	}
 
 	if _, err := conn.Do("HSET", r.namespaces, k, v); err != nil {
-		return
+		return err
 	}
 
-	return
+	return nil
 }
 
 func (r *RedisDrive) readEntries() {
