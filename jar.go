@@ -12,10 +12,10 @@ import (
 	"net/http"
 	"net/url"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
-	"strconv"
 )
 
 // PublicSuffixList provides the public suffix of a domain. For example:
@@ -89,22 +89,22 @@ func New(s Storage, o *Options) (*Jar, error) {
 // This struct type is not used outside of this package per se, but the exported
 // fields are those of RFC 6265.
 type entry struct {
-	Name       string
-	Value      string
-	Domain     string
-	Path       string
-	Secure     bool
-	HttpOnly   bool
-	Persistent bool
-	HostOnly   bool
-	Expires    time.Time
-	Creation   time.Time
-	LastAccess time.Time
+	Name       string    `json:"name"`
+	Value      string    `json:"value"`
+	Domain     string    `json:"domain"`
+	Path       string    `json:"path"`
+	Secure     bool      `json:"secure"`
+	HttpOnly   bool      `json:"http_only"`
+	Persistent bool      `json:"persistent"`
+	HostOnly   bool      `json:"host_only"`
+	Expires    time.Time `json:"expires"`
+	Creation   time.Time `json:"creation"`
+	LastAccess time.Time `json:"last_access"`
 
 	// seqNum is a sequence number so that Cookies returns cookies in a
 	// deterministic order, even for cookies that have equal Path length and
 	// equal Creation time. This simplifies testing.
-	seqNum uint64
+	seqNum uint64 `json:"seq_num"`
 }
 
 // id returns the domain;path;name triple of e as an id.
@@ -144,8 +144,8 @@ func (e *entry) pathMatch(requestPath string) bool {
 
 func (e *entry) record() []string {
 	var (
-		utime int64
-		tailMatch = false // weather we do tail-matchning of the domain name
+		utime          int64
+		tailMatch      = false // weather we do tail-matchning of the domain name
 		httpOnlyPrefix string
 	)
 	if !e.Expires.Equal(time.Time{}) {
