@@ -58,7 +58,7 @@ func (r *RedisDrive) readEntries() {
 		}
 
 		e := make(map[string]entry)
-		if err := json.Unmarshal(b, e); err != nil {
+		if err := json.Unmarshal(b, &e); err != nil {
 			// resolve fail
 		}
 
