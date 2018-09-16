@@ -46,7 +46,7 @@ func (r *RedisDrive) readEntries() {
 	c := r.pool.Get()
 	defer c.Close()
 
-	keys, err := redis.Strings(c.Do("HGETALL", r.namespaces))
+	keys, err := redis.Strings(c.Do("HKEYS", r.namespaces))
 	if err != nil {
 		return
 	}
