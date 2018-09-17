@@ -1,8 +1,12 @@
 package cookiejar
 
 import (
-	"github.com/gomodule/redigo/redis"
 	"net/http"
+
+	"crypto/sha1"
+	"encoding/hex"
+
+	"github.com/gomodule/redigo/redis"
 )
 
 type Storage interface {
@@ -28,10 +32,17 @@ func NewEntriesJar(o *Options) (http.CookieJar, error) {
 	return New(store, o)
 }
 
-func NewRedisJar(pool *redis.Pool, o *Options) (http.CookieJar, error) {
+func NewRedisJar(namespaces string, pool *redis.Pool, o *Options) (http.CookieJar, error) {
+	if namespaces == "" {
+		namespaces = "cookiejar"
+	}
+
+	r := sha1.Sum([]byte(namespaces))
+	namespaces = hex.EncodeToString(r[:])
+
 	store := &RedisDrive{
 		pool:       pool,
-		namespaces: "cookiejar",
+		namespaces: namespaces,
 		entries:    make(map[string]map[string]entry),
 	}
 	store.readEntries()
