@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 	"io/ioutil"
-	"github.com/ziiber/cookiejar"
+	"github.com/telanflow/cookiejar"
 )
 
 func main() {
